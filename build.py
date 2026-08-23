@@ -425,20 +425,8 @@ TEMPLATE = '''<!DOCTYPE html>
           <div class="form-row">
             <label for="service">{label_service}</label>
             <select id="service" name="service">
-              <option value="">{opt_select}</option>
+              <option value="" data-en="{opt_select_en}" data-ru="{opt_select_ru}">{opt_select_en}</option>
               {service_options}
-            </select>
-          </div>
-
-          <div class="form-row">
-            <label for="budget">{label_budget}</label>
-            <select id="budget" name="budget">
-              <option value="">{opt_select_range}</option>
-              <option value="Under $5,000">Under $5,000 / До $5,000</option>
-              <option value="$5,000 - $15,000">$5,000 &ndash; $15,000</option>
-              <option value="$15,000 - $50,000">$15,000 &ndash; $50,000</option>
-              <option value="$50,000+">$50,000+</option>
-              <option value="Not sure yet">{opt_not_sure}</option>
             </select>
           </div>
 
@@ -478,11 +466,12 @@ TEMPLATE = '''<!DOCTYPE html>
 def build_service_options():
     opts = []
     for _icn, ten, tru, *_rest, data_service, _wide in SERVICES:
-        opts.append(f'<option value="{e(data_service)}">{e(ten)} / {e(tru)}</option>')
+        opts.append(f'<option value="{e(data_service)}" data-en="{e(ten)}" data-ru="{e(tru)}">{e(ten)}</option>')
     for gen, gru, items in PRODUCT_GROUPS:
         for _icn, ten, tru, *_rest in items:
-            opts.append(f'<option value="{e(ten)}">{e(ten)} / {e(tru)}</option>')
-    opts.append('<option value="Other">Other / Not sure yet — Другое / пока не уверен(а)</option>')
+            opts.append(f'<option value="{e(ten)}" data-en="{e(ten)}" data-ru="{e(tru)}">{e(ten)}</option>')
+    opts.append('<option value="Other" data-en="Other (please specify in message)" '
+                 'data-ru="Другое (уточните в сообщении)">Other (please specify in message)</option>')
     return ''.join(opts)
 
 
@@ -593,11 +582,9 @@ def main():
         label_company=bi("Company", "Компания"),
         label_email=bi("Email", "Email"),
         label_service=bi("What do you need help with?", "С чем нужна помощь?"),
-        opt_select="Select an option… / Выберите вариант…",
+        opt_select_en="Select an option…",
+        opt_select_ru="Выберите вариант…",
         service_options=build_service_options(),
-        label_budget=bi("Budget range", "Бюджет"),
-        opt_select_range="Select a range… / Выберите диапазон…",
-        opt_not_sure="Not sure yet / Пока не уверен(а)",
         label_message=bi("Message", "Сообщение"),
         btn_submit=bi("Discuss Your Project", "Обсудить проект"),
         footer_rights=bi("All rights reserved.", "Все права защищены."),
