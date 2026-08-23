@@ -12,6 +12,11 @@
   // (localStorage) is used on purpose — add it yourself if you want the choice to
   // survive a page reload once this is live on your own domain.
   var langBtns = document.querySelectorAll('.lang-btn');
+  // <select><option> text can't be split into data-lang spans the way the rest of the
+  // page is (browsers render only the option's own text, ignoring any nested markup),
+  // so each bilingual option instead carries data-en / data-ru attributes and this
+  // rewrites its visible text whenever the language is switched.
+  var langOptions = document.querySelectorAll('option[data-en]');
   function setLang(lang) {
     document.documentElement.setAttribute('data-lang', lang);
     document.documentElement.setAttribute('lang', lang);
@@ -19,6 +24,10 @@
       var isActive = btn.getAttribute('data-set-lang') === lang;
       btn.classList.toggle('is-active', isActive);
       btn.setAttribute('aria-pressed', String(isActive));
+    });
+    langOptions.forEach(function (opt) {
+      var text = lang === 'ru' ? opt.getAttribute('data-ru') : opt.getAttribute('data-en');
+      if (text) opt.textContent = text;
     });
   }
   langBtns.forEach(function (btn) {
@@ -153,7 +162,6 @@
         company: form.company.value,
         email: form.email.value,
         service: form.service.value,
-        budget: form.budget.value,
         message: form.message.value
       };
 
