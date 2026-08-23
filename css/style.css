@@ -14,6 +14,7 @@
   --color-accent: #2A46C7;
   --color-accent-ink: #1B2E8C;
   --color-accent-soft: #E7EBFA;
+  --color-accent-warm: #C77A2A;
   --color-line: #E3E1D9;
   --color-line-soft: #ECEAE2;
 
@@ -243,13 +244,78 @@ h3 { font-size: 1.25rem; }
 .hero-contact a { color: var(--color-ink-soft); transition: color var(--transition); }
 .hero-contact a:hover { color: var(--color-accent); }
 
-.hero-portrait img {
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-card-hover);
+.hero-graphic {
   width: 100%;
   height: auto;
-  aspect-ratio: 5 / 6;
-  object-fit: cover;
+  display: block;
+  aspect-ratio: 480 / 560;
+}
+
+/* orbiting molecule pulses + breathing portal ring (shared by hero graphic & eyebrow mark) */
+.pulse-node { transform-box: fill-box; transform-origin: center; }
+.pulse-ring {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: hero-pulse-out 2.6s ease-out infinite;
+}
+@keyframes hero-pulse-out {
+  0%   { transform: scale(0.5); opacity: 0.6; }
+  75%  { transform: scale(2.8); opacity: 0; }
+  100% { transform: scale(2.8); opacity: 0; }
+}
+.hub-ring {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: hero-breathe 3.2s ease-in-out infinite;
+}
+@keyframes hero-breathe {
+  0%, 100% { transform: scale(1); opacity: 0.45; }
+  50% { transform: scale(1.18); opacity: 0.85; }
+}
+
+.hero-eyebrow-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+.hero-eyebrow-badge {
+  position: relative;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hero-eyebrow-ring {
+  position: absolute;
+  inset: -8px;
+  width: 52px;
+  height: 52px;
+  overflow: visible;
+}
+.hero-eyebrow-mark {
+  position: relative;
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--color-ink);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 600;
+}
+.hero-eyebrow-text {
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-ink-soft);
 }
 
 /* ---------- Sections ---------- */
