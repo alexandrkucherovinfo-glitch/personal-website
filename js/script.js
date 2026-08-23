@@ -5,6 +5,29 @@
   var yearEl = document.getElementById('year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
+  // ---------- Language toggle (EN / RU) ----------
+  // Initial language is set synchronously in <head> based on navigator.language,
+  // to avoid a flash of the wrong language. This just wires up the toggle buttons
+  // and keeps them in sync with the current html[data-lang] value. No persistence
+  // (localStorage) is used on purpose — add it yourself if you want the choice to
+  // survive a page reload once this is live on your own domain.
+  var langBtns = document.querySelectorAll('.lang-btn');
+  function setLang(lang) {
+    document.documentElement.setAttribute('data-lang', lang);
+    document.documentElement.setAttribute('lang', lang);
+    langBtns.forEach(function (btn) {
+      var isActive = btn.getAttribute('data-set-lang') === lang;
+      btn.classList.toggle('is-active', isActive);
+      btn.setAttribute('aria-pressed', String(isActive));
+    });
+  }
+  langBtns.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      setLang(btn.getAttribute('data-set-lang'));
+    });
+  });
+  setLang(document.documentElement.getAttribute('data-lang') === 'ru' ? 'ru' : 'en');
+
   // ---------- Sticky header shadow ----------
   var header = document.getElementById('site-header');
   var onScroll = function () {
