@@ -27,6 +27,125 @@ def build_sprite():
     return '<svg class="icon-sprite" aria-hidden="true">' + ''.join(symbols) + '</svg>'
 
 
+# ------------------------------------------------------------ hero art ---
+def build_hero_graphic():
+    """Animated hero visual: a rotating wireframe globe with orbiting molecule
+    nodes, and a circular 'AK' portal ring that sweeps across the scene,
+    turning scattered chaos ahead of it into an ordered grid behind it.
+    Pure SVG + SMIL so it scales correctly at any responsive size."""
+    return '''<svg class="hero-graphic" viewBox="0 0 480 560" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Animated globe with a portal ring turning chaos into order">
+  <defs>
+    <radialGradient id="heroGlobeFill" cx="35%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#2A46C7" stop-opacity="0.12" />
+      <stop offset="100%" stop-color="#2A46C7" stop-opacity="0.02" />
+    </radialGradient>
+    <clipPath id="heroChaosClip">
+      <rect x="40" y="0" width="780" height="820">
+        <animate attributeName="x" values="40;640;40" dur="20s" repeatCount="indefinite" />
+        <animate attributeName="width" values="780;180;780" dur="20s" repeatCount="indefinite" />
+      </rect>
+    </clipPath>
+    <clipPath id="heroOrderClip">
+      <rect x="0" y="0" width="40" height="820">
+        <animate attributeName="width" values="40;640;40" dur="20s" repeatCount="indefinite" />
+      </rect>
+    </clipPath>
+  </defs>
+
+  <g transform="translate(0,40) scale(0.585)">
+
+    <!-- globe: rotating sphere with molecules orbiting it -->
+    <circle cx="450" cy="400" r="280" fill="url(#heroGlobeFill)" />
+    <circle cx="450" cy="400" r="280" fill="none" stroke="var(--color-ink)" stroke-opacity="0.16" stroke-width="1.5" />
+    <g fill="none" stroke="var(--color-ink)" stroke-opacity="0.13" stroke-width="1.2">
+      <ellipse cx="450" cy="400" rx="280" ry="78" />
+      <ellipse cx="450" cy="400" rx="280" ry="162" />
+      <ellipse cx="450" cy="240" rx="196" ry="50" />
+      <ellipse cx="450" cy="560" rx="196" ry="50" />
+      <ellipse cx="450" cy="400" rx="104" ry="280" />
+      <ellipse cx="450" cy="400" rx="204" ry="280" />
+      <animateTransform attributeName="transform" type="rotate" from="0 450 400" to="360 450 400" dur="70s" repeatCount="indefinite" />
+    </g>
+    <ellipse cx="450" cy="400" rx="354" ry="128" fill="none" stroke="var(--color-accent)" stroke-opacity="0.16" stroke-width="1.2" transform="rotate(-16 450 400)" />
+
+    <!-- connective arcs between orbiting molecules -->
+    <g fill="none" stroke-opacity="0.4" stroke-width="1.4" stroke-dasharray="3 6">
+      <path d="M310 260 Q 450 150 590 270" stroke="var(--color-accent)" />
+      <path d="M290 440 Q 450 510 640 420" stroke="var(--color-accent-warm)" />
+      <path d="M380 570 Q 480 640 590 550" stroke="var(--color-accent)" />
+    </g>
+
+    <!-- molecules orbiting the globe, each on its own path and speed -->
+    <g>
+      <circle class="pulse-ring" cx="310" cy="260" r="6" fill="var(--color-accent)" opacity="0.5" />
+      <circle class="pulse-node" cx="310" cy="260" r="5" fill="var(--color-accent)" />
+      <animateTransform attributeName="transform" type="rotate" from="0 450 400" to="360 450 400" dur="26s" repeatCount="indefinite" />
+    </g>
+    <g>
+      <circle class="pulse-ring" cx="590" cy="270" r="6" fill="var(--color-accent-warm)" opacity="0.5" style="animation-delay:0.8s" />
+      <circle class="pulse-node" cx="590" cy="270" r="5" fill="var(--color-accent-warm)" />
+      <animateTransform attributeName="transform" type="rotate" from="360 450 400" to="0 450 400" dur="34s" repeatCount="indefinite" />
+    </g>
+    <g>
+      <circle class="pulse-ring" cx="640" cy="420" r="6" fill="var(--color-accent)" opacity="0.5" style="animation-delay:1.6s" />
+      <circle class="pulse-node" cx="640" cy="420" r="5" fill="var(--color-accent)" />
+      <animateTransform attributeName="transform" type="rotate" from="0 450 400" to="360 450 400" dur="21s" repeatCount="indefinite" />
+    </g>
+    <g>
+      <circle class="pulse-ring" cx="290" cy="440" r="6" fill="var(--color-accent-warm)" opacity="0.5" style="animation-delay:0.4s" />
+      <circle class="pulse-node" cx="290" cy="440" r="5" fill="var(--color-accent-warm)" />
+      <animateTransform attributeName="transform" type="rotate" from="360 450 400" to="0 450 400" dur="29s" repeatCount="indefinite" />
+    </g>
+    <g>
+      <circle class="pulse-ring" cx="590" cy="550" r="6" fill="var(--color-accent)" opacity="0.5" style="animation-delay:1.2s" />
+      <circle class="pulse-node" cx="590" cy="550" r="5" fill="var(--color-accent)" />
+      <animateTransform attributeName="transform" type="rotate" from="0 450 400" to="360 450 400" dur="24s" repeatCount="indefinite" />
+    </g>
+
+    <!-- chaos: scattered molecules, ahead of the portal ring -->
+    <g clip-path="url(#heroChaosClip)" fill="var(--color-ink-faint)" opacity="0.5">
+      <rect x="115" y="175" width="11" height="11" transform="rotate(18 120 180)" />
+      <rect x="675" y="145" width="13" height="13" transform="rotate(-24 681 151)" />
+      <rect x="215" y="615" width="10" height="10" transform="rotate(32 220 620)" />
+      <rect x="595" y="655" width="12" height="12" transform="rotate(-12 601 661)" />
+      <rect x="85" y="415" width="11" height="11" transform="rotate(-30 90 420)" />
+      <rect x="735" y="375" width="10" height="10" transform="rotate(22 740 380)" />
+      <rect x="335" y="135" width="12" height="12" transform="rotate(-16 341 141)" />
+      <rect x="515" y="695" width="11" height="11" transform="rotate(27 520 700)" />
+      <rect x="695" y="535" width="10" height="10" transform="rotate(-20 700 540)" />
+    </g>
+
+    <!-- order: the same molecules, aligned into a system, revealed behind the ring -->
+    <g clip-path="url(#heroOrderClip)">
+      <g stroke="var(--color-accent)" stroke-opacity="0.3" stroke-width="1.2">
+        <path d="M330 280 L450 280 L570 280 M330 400 L450 400 L570 400 M330 520 L450 520 L570 520 M330 280 L330 520 M450 280 L450 520 M570 280 L570 520" />
+      </g>
+      <g fill="var(--color-accent)">
+        <rect x="324" y="274" width="12" height="12" />
+        <rect x="444" y="274" width="12" height="12" />
+        <rect x="564" y="274" width="12" height="12" />
+        <rect x="324" y="394" width="12" height="12" />
+        <rect x="444" y="394" width="12" height="12" fill="var(--color-accent-warm)" />
+        <rect x="564" y="394" width="12" height="12" />
+        <rect x="324" y="514" width="12" height="12" />
+        <rect x="444" y="514" width="12" height="12" />
+        <rect x="564" y="514" width="12" height="12" />
+      </g>
+    </g>
+
+    <!-- the portal ring: Alexander passing through, ordering the system behind him -->
+    <g>
+      <circle class="hub-ring" cx="40" cy="400" r="50" fill="none" stroke="var(--color-accent-warm)" stroke-width="1.6" />
+      <circle cx="40" cy="400" r="36" fill="var(--color-bg)" fill-opacity="0.6" stroke="var(--color-accent-warm)" stroke-opacity="0.55" stroke-width="1.2" />
+      <circle cx="40" cy="400" r="24" fill="var(--color-ink)" />
+      <text x="40" y="400" text-anchor="middle" dominant-baseline="central" font-family="var(--font-display)" font-size="14" font-weight="600" fill="#fff">AK</text>
+      <animateTransform attributeName="transform" type="translate" values="0 0;600 0;0 0" dur="20s" repeatCount="indefinite" />
+    </g>
+
+  </g>
+</svg>'''
+
+
 # ------------------------------------------------------------------ nav ---
 def build_nav():
     items = []
@@ -237,6 +356,15 @@ TEMPLATE = '''<!DOCTYPE html>
       <div class="container hero-inner">
         <div class="hero-copy reveal">
           <p class="eyebrow">Alexander Kucherov</p>
+          <div class="hero-eyebrow-row">
+            <span class="hero-eyebrow-badge">
+              <svg class="hero-eyebrow-ring" viewBox="0 0 52 52" aria-hidden="true">
+                <circle class="hub-ring" cx="26" cy="26" r="24" fill="none" stroke="var(--color-accent-warm)" stroke-width="1.3" />
+              </svg>
+              <span class="hero-eyebrow-mark">AK</span>
+            </span>
+            <span class="hero-eyebrow-text">{hero_eyebrow}</span>
+          </div>
           <h1>{hero_h1}</h1>
           <p class="hero-subhead">{hero_subhead}</p>
           <p class="hero-statement">{hero_statement}</p>
@@ -252,7 +380,7 @@ TEMPLATE = '''<!DOCTYPE html>
         </div>
 
         <div class="hero-portrait reveal">
-          <img src="assets/images/portrait-placeholder.svg" alt="Portrait of Alexander Kucherov" width="480" height="576" loading="eager">
+          {hero_graphic}
           <p class="hero-badge">{hero_badge}</p>
         </div>
       </div>
@@ -480,6 +608,10 @@ def main():
         sprite=build_sprite(),
         skip_link=bi("Skip to main content", "Перейти к основному содержанию"),
         nav=build_nav(),
+        hero_graphic=build_hero_graphic(),
+        hero_eyebrow=bi(
+            "Guide to your ambitions. Architect of your business.",
+            "Проводник ваших желаний и Архитектор вашего бизнеса"),
         hero_h1=bi(
             "20+ years turning business chaos into working systems — now available as consulting, "
             "done-for-you services, and ready-made playbooks.",
