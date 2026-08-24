@@ -172,19 +172,29 @@
       }
 
       // -----------------------------------------------------------------
-      // NOTE: This is a front-end-only placeholder. No data is sent yet.
-      // Connect a real submission handler here, for example:
-      //
-      //   Formspree:  fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } })
-      //   EmailJS:    emailjs.sendForm('SERVICE_ID', 'TEMPLATE_ID', form)
-      //   Custom API: fetch('/api/contact', { method: 'POST', body: JSON.stringify(data), headers: {'Content-Type':'application/json'} })
-      //
-      // Then handle the response/error to update formStatus below instead
-      // of the simulated success message.
-      // -----------------------------------------------------------------
-      statusEl.textContent = 'Thank you, ' + data.name.split(' ')[0] + '. Your message has been prepared — connect a form service (see comments in script.js) to deliver it.';
-      statusEl.className = 'form-status is-success';
-      form.reset();
+    var submitBtn = form.querySelector('[type="submit"]');
+    if (submitBtn) submitBtn.disabled = true;
+    statusEl.textContent = 'Sending…';
+    statusEl.className = 'form-status';
+
+    fetch('https://sashai.duckdns.org/webhook/contact-form', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    })
+      .then(function (response) {
+        if (!response.ok) throw new Error('Request failed');
+        statusEl.textContent = 'Thank you, ' + data.name.split(' ')[0] + '. Your message has been sent — I will get back to you soon.';
+        statusEl.className = 'form-status is-success';
+        form.reset();
+      })
+      .catch(function () {
+        statusEl.textContent = 'Sorry, something went wrong while sending your message. Please try again or email me directly.';
+        statusEl.className = 'form-status is-error';
+      })
+      .finally(function () {
+        if (submitBtn) submitBtn.disabled = false;
+      });
     });
   }
 })();
